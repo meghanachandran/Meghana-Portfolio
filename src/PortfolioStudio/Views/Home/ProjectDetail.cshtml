@@ -1,0 +1,200 @@
+@model ProjectDetailViewModel
+@{
+    var project = Model.Project;
+    ViewData["Title"] = project.Title;
+    var techList = (project.TechStack ?? string.Empty)
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+}
+
+<section class="py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb small">
+                <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted-custom">Home</a></li>
+                <li class="breadcrumb-item"><a href="/#portfolio" class="text-decoration-none text-muted-custom">Portfolio</a></li>
+                <li class="breadcrumb-item active text-accent" aria-current="page">@project.Title</li>
+            </ol>
+        </nav>
+
+        @if (!project.IsPublished)
+        {
+            <div class="alert alert-warning d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <i class="bi bi-eye-slash me-2"></i>
+                    <strong>Draft Preview:</strong> Only signed-in administrators can view this unpublished case study.
+                </div>
+                <a asp-controller="Admin" asp-action="EditProject" asp-route-id="@project.ProjectId" class="btn btn-sm btn-dark">Edit Project</a>
+            </div>
+        }
+
+        <div class="row g-5 align-items-start">
+            <div class="col-lg-8">
+                <span class="font-mono small text-accent fw-semibold text-uppercase">
+                    @(project.Category?.Name ?? "Case Study")
+                </span>
+                <h1 class="display-5 fw-bold mt-2 mb-3">@project.Title</h1>
+                <p class="lead text-muted-custom mb-4">@project.ShortDescription</p>
+
+                <div class="surface-card overflow-hidden mb-5">
+                    <img src="@project.ThumbnailUrl" alt="@project.Title" class="w-100" style="max-height:480px;object-fit:cover;" />
+                </div>
+
+                <div class="d-flex flex-column gap-4">
+                    @if (!string.IsNullOrWhiteSpace(project.CaseStudyChallenge))
+                    {
+                        <div class="surface-card p-4 p-md-5 reveal is-visible">
+                            <span class="section-eyebrow">Requirement</span>
+                            <h2 class="h4 fw-bold mt-1 mb-3">Problem Statement</h2>
+                            <p class="text-muted-custom lh-lg mb-0" style="white-space: pre-line;">@project.CaseStudyChallenge</p>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(project.CaseStudySolution))
+                    {
+                        <div class="surface-card p-4 p-md-5 reveal">
+                            <span class="section-eyebrow">Approach</span>
+                            <h2 class="h4 fw-bold mt-1 mb-3">Implementation &amp; Architecture</h2>
+                            <p class="text-muted-custom lh-lg mb-0" style="white-space: pre-line;">@project.CaseStudySolution</p>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(project.CaseStudyOutcome))
+                    {
+                        <div class="surface-card p-4 p-md-5 reveal">
+                            <span class="section-eyebrow">Result</span>
+                            <h2 class="h4 fw-bold mt-1 mb-3">Outcome &amp; Impact</h2>
+                            <p class="text-muted-custom lh-lg mb-0" style="white-space: pre-line;">@project.CaseStudyOutcome</p>
+                        </div>
+                    }
+                </div>
+
+                @if (project.Images.Any())
+                {
+                    <div class="mt-5 reveal">
+                        <span class="section-eyebrow">Gallery</span>
+                        <h2 class="h4 fw-bold mt-1 mb-4">Project Screenshots</h2>
+                        <div class="row g-3">
+                            @foreach (var img in project.Images)
+                            {
+                                <div class="col-sm-6">
+                                    <div class="surface-card overflow-hidden gallery-thumb"
+                                         data-lightbox-src="@img.ImageUrl"
+                                         data-lightbox-caption="@(img.Caption ?? project.Title)">
+                                        <img src="@img.ImageUrl" alt="@(img.Caption ?? project.Title)" class="w-100" style="height:220px;object-fit:cover;" />
+                                        @if (!string.IsNullOrWhiteSpace(img.Caption))
+                                        {
+                                            <div class="p-3 small text-muted-custom">@img.Caption</div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <aside class="col-lg-4">
+                <div class="surface-card p-4 sticky-lg-top" style="top: 96px;">
+                    <h3 class="h5 fw-bold mb-4">Project Details</h3>
+
+                    <dl class="row small mb-4">
+                        <dt class="col-5 text-muted-custom mb-2">Category</dt>
+                        <dd class="col-7 fw-semibold mb-2">@(project.Category?.Name ?? "-")</dd>
+
+                        @if (!string.IsNullOrWhiteSpace(project.ClientName))
+                        {
+                            <dt class="col-5 text-muted-custom mb-2">Client</dt>
+                            <dd class="col-7 fw-semibold mb-2">@project.ClientName</dd>
+                        }
+
+                        @if (project.ProjectDate.HasValue)
+                        {
+                            <dt class="col-5 text-muted-custom mb-2">Delivered</dt>
+                            <dd class="col-7 fw-semibold mb-2">@project.ProjectDate.Value.ToString("MMMM yyyy")</dd>
+                        }
+                    </dl>
+
+                    @if (techList.Any())
+                    {
+                        <div class="mb-4">
+                            <div class="small text-muted-custom fw-semibold mb-2">Tech Stack</div>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var tech in techList)
+                                {
+                                    <span class="tech-pill">@tech</span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @{
+                        var safeLiveUrl = PortfolioStudio.Services.UrlSafetyHelper.ToSafeExternalOrAnchorUrl(project.LiveUrl);
+                        var safeRepoUrl = PortfolioStudio.Services.UrlSafetyHelper.ToSafeExternalOrAnchorUrl(project.RepoUrl);
+                    }
+                    <div class="d-flex flex-column gap-2">
+                        @if (!string.IsNullOrWhiteSpace(safeLiveUrl))
+                        {
+                            <a href="@safeLiveUrl" target="_blank" rel="noopener noreferrer" class="btn btn-accent w-100">
+                                <i class="bi bi-box-arrow-up-right me-1"></i> Visit Live Demo
+                            </a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(safeRepoUrl))
+                        {
+                            <a href="@safeRepoUrl" target="_blank" rel="noopener noreferrer" class="btn btn-outline-glass w-100">
+                                <i class="bi bi-github me-1"></i> View Source Code
+                            </a>
+                        }
+                        <a href="/#portfolio" class="btn btn-outline-glass w-100 mt-2">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Portfolio
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        @if (Model.RelatedProjects.Any())
+        {
+            <div class="mt-5 pt-5 border-top border-subtle">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h4 fw-bold mb-0">More Case Studies</h2>
+                    <a href="/#portfolio" class="text-decoration-none text-accent small fw-semibold">View All &rarr;</a>
+                </div>
+                <div class="row g-4">
+                    @foreach (var rel in Model.RelatedProjects)
+                    {
+                        <div class="col-md-4">
+                            <div class="surface-card surface-card-hover h-100">
+                                <a asp-controller="Home" asp-action="ProjectDetail" asp-route-slug="@rel.Slug" class="project-thumb-wrap d-block">
+                                    <img src="@rel.ThumbnailUrl" alt="@rel.Title" />
+                                </a>
+                                <div class="p-3">
+                                    <span class="font-mono small text-accent">@(rel.Category?.Name)</span>
+                                    <h3 class="h6 fw-bold mt-1 mb-1">
+                                        <a asp-controller="Home" asp-action="ProjectDetail" asp-route-slug="@rel.Slug" class="text-decoration-none text-main stretched-link">
+                                            @rel.Title
+                                        </a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="galleryLightboxModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content surface-card border-subtle">
+            <div class="modal-header border-subtle">
+                <h5 class="modal-title h6 fw-bold" id="lightboxCaption">Screenshot</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-2 text-center">
+                <img id="lightboxImage" src="" alt="Gallery Preview" class="img-fluid rounded-3" />
+            </div>
+        </div>
+    </div>
+</div>

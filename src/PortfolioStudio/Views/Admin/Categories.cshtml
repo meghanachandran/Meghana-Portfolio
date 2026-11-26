@@ -1,0 +1,99 @@
+@model List<Category>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Categories";
+}
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="surface-card p-4">
+            <h2 class="h6 fw-bold mb-3">Portfolio Categories</h2>
+            <div class="table-responsive">
+                <table class="table table-custom align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Slug</th>
+                            <th>Order</th>
+                            <th>Projects</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cat in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@cat.Name</td>
+                                <td class="font-mono small text-muted-custom">@cat.Slug</td>
+                                <td class="small">@cat.DisplayOrder</td>
+                                <td class="small">@cat.Projects.Count</td>
+                                <td class="text-end">
+                                    <button type="button"
+                                            class="btn btn-outline-glass btn-sm js-edit-category"
+                                            data-id="@cat.CategoryId"
+                                            data-name="@cat.Name"
+                                            data-slug="@cat.Slug"
+                                            data-order="@cat.DisplayOrder">
+                                        Edit
+                                    </button>
+                                    <form asp-action="DeleteCategory" asp-route-id="@cat.CategoryId" method="post" class="d-inline" onsubmit="return confirm('Delete category &quot;@cat.Name&quot;?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger-soft btn-sm"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="surface-card p-4">
+            <h2 class="h6 fw-bold mb-3" id="categoryFormTitle">Add New Category</h2>
+            <form asp-action="SaveCategory" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="catId" name="CategoryId" value="0" />
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Category Name</label>
+                    <input type="text" id="catName" name="Name" class="form-control form-control-custom" required placeholder="e.g. ASP.NET Web Apps" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Slug (optional)</label>
+                    <input type="text" id="catSlug" name="Slug" class="form-control form-control-custom font-mono" placeholder="auto-generated" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-semibold">Display Order</label>
+                    <input type="number" id="catOrder" name="DisplayOrder" value="0" class="form-control form-control-custom" />
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-accent flex-grow-1">Save Category</button>
+                    <button type="button" class="btn btn-outline-glass" onclick="resetCategoryForm()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.js-edit-category').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                document.getElementById('categoryFormTitle').textContent = 'Edit Category';
+                document.getElementById('catId').value = btn.dataset.id || '0';
+                document.getElementById('catName').value = btn.dataset.name || '';
+                document.getElementById('catSlug').value = btn.dataset.slug || '';
+                document.getElementById('catOrder').value = btn.dataset.order || '0';
+            });
+        });
+        function resetCategoryForm() {
+            document.getElementById('categoryFormTitle').textContent = 'Add New Category';
+            document.getElementById('catId').value = 0;
+            document.getElementById('catName').value = '';
+            document.getElementById('catSlug').value = '';
+            document.getElementById('catOrder').value = 0;
+        }
+    </script>
+}

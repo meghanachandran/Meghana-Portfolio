@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: portfolio-studio
+    runtime: docker
+    plan: free
+    envVars:
+      - key: DatabaseProvider
+        value: PostgreSql
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: AdminSeed__Email
+        value: admin@portfoliostudio.dev
+      - key: AdminSeed__Password
+        sync: false
+      - key: Cloudinary__CloudName
+        sync: false
+      - key: Cloudinary__ApiKey
+        sync: false
+      - key: Cloudinary__ApiSecret
+        sync: false

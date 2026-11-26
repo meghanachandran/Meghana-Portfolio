@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600">
+  <defs>
+    <linearGradient id="hsBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#hsBg)"/>
+  <rect x="64" y="56" width="832" height="488" rx="20" fill="#ffffff"/>
+  <text x="104" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#1e1b4b">HireSync — Applicant Management</text>
+  <text x="104" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">ASP.NET MVC &amp; Stored-Procedure Driven Hiring Workflow</text>
+  <rect x="104" y="168" width="240" height="330" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="104" y="168" width="240" height="44" rx="14" fill="#e0e7ff"/>
+  <text x="124" y="196" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#3730a3">New Applicants (14)</text>
+  <rect x="120" y="232" width="208" height="72" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="136" y="260" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Sreejith Nair</text>
+  <text x="136" y="284" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">.NET Developer • Thrissur</text>
+  <rect x="120" y="320" width="208" height="72" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="136" y="348" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Lakshmi Unni</text>
+  <text x="136" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">SQL Analyst • Kottayam</text>
+  <rect x="364" y="168" width="240" height="330" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="364" y="168" width="240" height="44" rx="14" fill="#fef3c7"/>
+  <text x="384" y="196" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#92400e">Shortlisted (6)</text>
+  <rect x="380" y="232" width="208" height="72" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="396" y="260" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Vishnu Prasad</text>
+  <text x="396" y="284" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">Full Stack MVC • Kochi</text>
+  <rect x="624" y="168" width="232" height="330" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="624" y="168" width="232" height="44" rx="14" fill="#d1fae5"/>
+  <text x="644" y="196" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#065f46">Selected (3)</text>
+  <rect x="640" y="232" width="200" height="72" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="656" y="260" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Athira Raj</text>
+  <text x="656" y="284" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#059669">Offer Extended</text>
+</svg>

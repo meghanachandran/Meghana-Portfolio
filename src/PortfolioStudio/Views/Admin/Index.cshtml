@@ -1,0 +1,139 @@
+@model AdminDashboardViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Dashboard Overview";
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-2">
+        <div class="surface-card p-3 h-100">
+            <div class="small text-muted-custom">Total Projects</div>
+            <div class="h3 fw-bold mb-0 mt-1">@Model.TotalProjects</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="surface-card p-3 h-100">
+            <div class="small text-muted-custom">Published</div>
+            <div class="h3 fw-bold mb-0 mt-1 text-success">@Model.PublishedProjects</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="surface-card p-3 h-100">
+            <div class="small text-muted-custom">Drafts</div>
+            <div class="h3 fw-bold mb-0 mt-1 text-warning">@Model.DraftProjects</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="surface-card p-3 h-100">
+            <div class="small text-muted-custom">Categories</div>
+            <div class="h3 fw-bold mb-0 mt-1">@Model.TotalCategories</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="surface-card p-3 h-100">
+            <div class="small text-muted-custom">Active Services</div>
+            <div class="h3 fw-bold mb-0 mt-1">@Model.ActiveServices</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-2">
+        <div class="surface-card p-3 h-100">
+            <div class="small text-muted-custom">Unread Inbox</div>
+            <div class="h3 fw-bold mb-0 mt-1 text-accent">@Model.UnreadMessages</div>
+        </div>
+    </div>
+</div>
+
+<div class="surface-card p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+            <h2 class="h6 fw-bold mb-1">Quick Content Actions</h2>
+            <p class="small text-muted-custom mb-0">Everything on your public portfolio updates immediately from here.</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-action="CreateProject" class="btn btn-accent btn-sm px-3"><i class="bi bi-plus-lg me-1"></i> Upload Case Study</a>
+            <a asp-action="Profile" class="btn btn-outline-glass btn-sm px-3"><i class="bi bi-person-badge me-1"></i> Edit About Section</a>
+            <a asp-action="Services" class="btn btn-outline-glass btn-sm px-3"><i class="bi bi-layers me-1"></i> Manage Services</a>
+            <a asp-action="Categories" class="btn btn-outline-glass btn-sm px-3"><i class="bi bi-tags me-1"></i> Manage Categories</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="surface-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h6 fw-bold mb-0">Recent Projects &amp; Case Studies</h2>
+                <a asp-action="Projects" class="small text-accent text-decoration-none">Manage All &rarr;</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-custom align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model.RecentProjects)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="@p.ThumbnailUrl" alt="@p.Title" class="rounded-2" style="width:44px;height:32px;object-fit:cover;" />
+                                        <div>
+                                            <div class="fw-semibold small">@p.Title</div>
+                                            <div class="text-muted-custom font-mono" style="font-size:0.72rem;">/@p.Slug</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="small text-muted-custom">@(p.Category?.Name ?? "-")</td>
+                                <td>
+                                    <span class="badge rounded-pill @(p.IsPublished ? "badge-published" : "badge-draft")">
+                                        @(p.IsPublished ? "Published" : "Draft")
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <a asp-action="EditProject" asp-route-id="@p.ProjectId" class="btn btn-outline-glass btn-sm">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="surface-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h6 fw-bold mb-0">Recent Inquiries</h2>
+                <a asp-action="Messages" class="small text-accent text-decoration-none">Inbox &rarr;</a>
+            </div>
+            @if (!Model.RecentMessages.Any())
+            {
+                <p class="small text-muted-custom mb-0">No contact inquiries yet.</p>
+            }
+            else
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var msg in Model.RecentMessages)
+                    {
+                        <div class="p-3 rounded-3" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="small">@msg.SenderName</strong>
+                                @if (!msg.IsRead)
+                                {
+                                    <span class="badge bg-info text-dark" style="font-size:0.65rem;">New</span>
+                                }
+                            </div>
+                            <div class="small text-accent text-truncate">@msg.Subject</div>
+                            <div class="text-muted-custom" style="font-size:0.74rem;">@msg.SubmittedAt.ToString("MMM dd, HH:mm") UTC</div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

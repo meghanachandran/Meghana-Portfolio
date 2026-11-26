@@ -1,0 +1,408 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "ASP.NET Full Stack Developer";
+    var activeFilter = Model.SelectedCategorySlug ?? "all";
+}
+
+<!-- HERO SECTION -->
+<section id="hero" class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7 reveal is-visible">
+                <div class="hero-badge mb-3">
+                    <i class="bi bi-geo-alt-fill text-accent"></i>
+                    <span>@(Model.Profile.Location ?? "Thrissur, Kerala") &bull; ASP.NET Full Stack Developer</span>
+                </div>
+                <h1 class="hero-title mb-3">
+                    Hi, I'm <span class="text-accent">@Model.Profile.FullName</span>.
+                </h1>
+                <p class="h5 fw-semibold text-main mb-3 lh-base">
+                    @Model.Profile.Headline
+                </p>
+                <p class="text-muted-custom mb-4 lh-lg pe-lg-4">
+                    @Model.Profile.AboutSummary
+                </p>
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    <a href="#portfolio" class="btn btn-accent px-4 py-2.5 d-inline-flex align-items-center gap-2">
+                        View My Projects <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="#contact" class="btn btn-outline-glass px-4 py-2.5">
+                        Contact Me
+                    </a>
+                    @{
+                        var safeLinkedIn = PortfolioStudio.Services.UrlSafetyHelper.ToSafeExternalOrAnchorUrl(Model.Profile.LinkedInUrl);
+                        var safeGitHub = PortfolioStudio.Services.UrlSafetyHelper.ToSafeExternalOrAnchorUrl(Model.Profile.GitHubUrl);
+                    }
+                    @if (!string.IsNullOrWhiteSpace(safeLinkedIn))
+                    {
+                        <a href="@safeLinkedIn" target="_blank" rel="noopener noreferrer" class="btn btn-outline-glass px-3 py-2.5" aria-label="LinkedIn">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(safeGitHub))
+                    {
+                        <a href="@safeGitHub" target="_blank" rel="noopener noreferrer" class="btn btn-outline-glass px-3 py-2.5" aria-label="GitHub">
+                            <i class="bi bi-github"></i>
+                        </a>
+                    }
+                </div>
+
+                <div class="row g-3 mt-4 pt-3 border-top border-subtle">
+                    <div class="col-4">
+                        <div class="h4 fw-bold mb-0">@Model.Projects.Count+</div>
+                        <div class="small text-muted-custom">Web Applications</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 fw-bold mb-0">MCA</div>
+                        <div class="small text-muted-custom">RIT Kottayam</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 fw-bold mb-0">.NET &amp; SQL</div>
+                        <div class="small text-muted-custom">Full Stack Focus</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 reveal is-visible">
+                <div class="surface-card p-4">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <img src="@(string.IsNullOrWhiteSpace(Model.Profile.ProfileImageUrl) ? "/images/seed/avatar.svg" : Model.Profile.ProfileImageUrl)"
+                             alt="@Model.Profile.FullName"
+                             class="rounded-4 border border-subtle"
+                             style="width:88px;height:88px;object-fit:cover;" />
+                        <div>
+                            <h2 class="h5 fw-bold mb-1">@Model.Profile.FullName</h2>
+                            <div class="small text-accent fw-semibold">ASP.NET Full Stack Developer</div>
+                            <div class="small text-muted-custom mt-1">
+                                <i class="bi bi-mortarboard me-1"></i>MCA &bull; BCA (Thrissur, Kerala)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="small fw-semibold text-muted-custom text-uppercase mb-2" style="letter-spacing:0.06em;">Core Technical Stack</div>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var skill in new[] { "C#", "ASP.NET Core MVC", "ASP.NET Web Forms", "Razor Views", "SQL Server", "Stored Procedures", "Entity Framework", "ADO.NET", "LINQ", "Bootstrap", "JavaScript", "Angular", "JWT Auth", "Git & GitHub" })
+                            {
+                                <span class="tech-pill">@skill</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-3 mt-3 small" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                        <div class="fw-semibold mb-1"><i class="bi bi-briefcase me-1 text-accent"></i> Recent Experience</div>
+                        <div class="text-muted-custom">Software Engineer Trainee &bull; ClaySys Technologies (2026)</div>
+                        <div class="text-muted-custom">ASP.NET Developer Trainee &bull; Triocodes Technologies (2025)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="section-pad">
+    <div class="container">
+        <div class="surface-card p-4 p-lg-5 reveal">
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <span class="section-eyebrow">About Me</span>
+                    <h2 class="h2 fw-bold mt-2 mb-3">Background &amp; Education</h2>
+                    @foreach (var paragraph in (Model.Profile.AboutBio ?? string.Empty).Split("\n", StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        <p class="text-muted-custom mb-3 lh-lg">@paragraph.Trim()</p>
+                    }
+
+                    <div class="d-flex flex-column gap-2 small mt-4 pt-3 border-top border-subtle">
+                        @if (!string.IsNullOrWhiteSpace(Model.Profile.Location))
+                        {
+                            <div class="d-flex align-items-center gap-2 text-muted-custom">
+                                <i class="bi bi-geo-alt text-accent"></i>
+                                <span>@Model.Profile.Location</span>
+                            </div>
+                        }
+                        <div class="d-flex align-items-center gap-2 text-muted-custom">
+                            <i class="bi bi-envelope text-accent"></i>
+                            <a href="mailto:@Model.Profile.Email" class="text-decoration-none text-main">@Model.Profile.Email</a>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Profile.Phone))
+                        {
+                            <div class="d-flex align-items-center gap-2 text-muted-custom">
+                                <i class="bi bi-telephone text-accent"></i>
+                                <span>@Model.Profile.Phone</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="mb-4">
+                        <h3 class="h5 fw-bold mb-3"><i class="bi bi-briefcase text-accent me-2"></i>Experience &amp; Training</h3>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="timeline-item">
+                                <div class="d-flex justify-content-between flex-wrap gap-1">
+                                    <strong class="small">Software Engineer Trainee — ClaySys Technologies</strong>
+                                    <span class="font-mono small text-muted-custom">01/2026 – 02/2026</span>
+                                </div>
+                                <div class="small text-muted-custom">Built role-based ASP.NET Core MVC applications with Entity Framework, LINQ, SQL Server, and structured exception handling.</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="d-flex justify-content-between flex-wrap gap-1">
+                                    <strong class="small">ASP.NET Developer Trainee — Triocodes Technologies</strong>
+                                    <span class="font-mono small text-muted-custom">01/2025 – 05/2025</span>
+                                </div>
+                                <div class="small text-muted-custom">Trained in ASP.NET Web Forms, SQL Server, and C#; developed the Careeronix job portal using Visual Studio &amp; SSMS.</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="d-flex justify-content-between flex-wrap gap-1">
+                                    <strong class="small">ASP.NET Full Stack Intern — Luminar Technolab, Kochi</strong>
+                                    <span class="font-mono small text-muted-custom">04/2024 – 09/2024</span>
+                                </div>
+                                <div class="small text-muted-custom">Developed C# ASP.NET MVC web apps, responsive Bootstrap/JS UIs, Angular front-end components, and Git workflows.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-top border-subtle">
+                        <h3 class="h5 fw-bold mb-3"><i class="bi bi-mortarboard text-accent me-2"></i>Education</h3>
+                        <div class="d-flex flex-column gap-2 small">
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Master of Computer Applications (MCA)</strong> — RIT, Kottayam</span>
+                                <span class="font-mono text-muted-custom">2021–2023</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Bachelor of Computer Applications (BCA)</strong> — Don Bosco College, Mannuthy, Thrissur</span>
+                                <span class="font-mono text-muted-custom">2018–2021</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Diploma in Computer Applications</strong> — KELTRON, Thrissur</span>
+                                <span class="font-mono text-muted-custom">2016</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section id="services" class="section-pad">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3 reveal">
+            <div>
+                <span class="section-eyebrow">Services</span>
+                <h2 class="h2 fw-bold mt-1 mb-0">What I Build</h2>
+            </div>
+            <p class="text-muted-custom mb-0" style="max-width: 440px;">
+                Practical full-stack development across C#, ASP.NET Core MVC, SQL Server, and responsive front-end interfaces.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var service in Model.Services)
+            {
+                <div class="col-md-6 col-lg-3 reveal">
+                    <div class="surface-card surface-card-hover p-4 h-100 d-flex flex-column">
+                        <div class="service-icon-box mb-3">
+                            <i class="bi @(string.IsNullOrWhiteSpace(service.IconClass) ? "bi-layers" : service.IconClass)"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2">@service.Title</h3>
+                        <p class="text-muted-custom small mb-0 lh-base flex-grow-1">@service.Description</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- PORTFOLIO SECTION -->
+<section id="portfolio" class="section-pad">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end mb-4 gap-3 reveal">
+            <div>
+                <span class="section-eyebrow">Portfolio</span>
+                <div class="d-flex align-items-center gap-3 mt-1">
+                    <h2 class="h2 fw-bold mb-0">Projects &amp; Case Studies</h2>
+                    <span id="visibleProjectsCount" class="badge rounded-pill px-3 py-2" style="background: var(--bg-elevated); color: var(--accent);">
+                        @Model.Projects.Count project@(Model.Projects.Count == 1 ? "" : "s")
+                    </span>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="filter-pill @(activeFilter == "all" ? "active" : "")" data-filter="all">
+                    All Projects
+                </button>
+                @foreach (var cat in Model.Categories)
+                {
+                    <button type="button"
+                            class="filter-pill @(activeFilter == cat.Slug ? "active" : "")"
+                            data-filter="@cat.Slug">
+                        @cat.Name
+                    </button>
+                }
+            </div>
+        </div>
+
+        @if (Model.Projects.Count == 0)
+        {
+            <div class="surface-card p-5 text-center reveal">
+                <i class="bi bi-folder2-open fs-1 text-accent mb-3 d-block"></i>
+                <h3 class="h5 fw-bold">No published projects yet</h3>
+                <p class="text-muted-custom mb-3">Sign in to the Admin Panel to publish a project.</p>
+                <a asp-controller="Admin" asp-action="CreateProject" class="btn btn-accent btn-sm px-4">Add Project</a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4" id="portfolioGrid">
+                @foreach (var project in Model.Projects)
+                {
+                    var catSlug = project.Category?.Slug ?? "general";
+                    var tags = (project.TechStack ?? string.Empty)
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .Take(4);
+
+                    <div class="col-md-6 col-lg-4 project-card reveal @(activeFilter != "all" && activeFilter != catSlug ? "is-hidden" : "")"
+                         data-category-slug="@catSlug">
+                        <article class="surface-card surface-card-hover h-100 d-flex flex-column">
+                            <a asp-controller="Home" asp-action="ProjectDetail" asp-route-slug="@project.Slug" class="project-thumb-wrap d-block">
+                                <img src="@project.ThumbnailUrl" alt="@project.Title" loading="lazy" />
+                                @if (project.IsFeatured)
+                                {
+                                    <span class="position-absolute top-0 end-0 m-3 badge rounded-pill px-3 py-2 bg-dark bg-opacity-75 text-warning">
+                                        <i class="bi bi-star-fill me-1"></i> Featured
+                                    </span>
+                                }
+                            </a>
+
+                            <div class="p-4 d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="font-mono small text-accent fw-semibold">@(project.Category?.Name ?? "Project")</span>
+                                    @if (project.ProjectDate.HasValue)
+                                    {
+                                        <span class="small text-muted-custom">@project.ProjectDate.Value.ToString("MMM yyyy")</span>
+                                    }
+                                </div>
+
+                                <h3 class="h5 fw-bold mb-2">
+                                    <a asp-controller="Home" asp-action="ProjectDetail" asp-route-slug="@project.Slug" class="text-decoration-none text-main stretched-link">
+                                        @project.Title
+                                    </a>
+                                </h3>
+
+                                <p class="text-muted-custom small mb-3 flex-grow-1">@project.ShortDescription</p>
+
+                                <div class="d-flex flex-wrap gap-1 mb-3">
+                                    @foreach (var tag in tags)
+                                    {
+                                        <span class="tech-pill">@tag</span>
+                                    }
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between pt-2 border-top border-subtle small fw-semibold text-accent">
+                                    <span>View Case Study</span>
+                                    <i class="bi bi-arrow-right"></i>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="section-pad">
+    <div class="container">
+        <div class="surface-card p-4 p-lg-5 reveal">
+            <div class="row g-5">
+                <div class="col-lg-5">
+                    <span class="section-eyebrow">Contact</span>
+                    <h2 class="h2 fw-bold mt-1 mb-3">Get in Touch</h2>
+                    <p class="text-muted-custom mb-4">
+                        Interested in collaborating or discussing an ASP.NET Core / SQL Server opportunity? Send a message below and it will appear directly in my Admin Inbox.
+                    </p>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: var(--bg-elevated);">
+                            <div class="service-icon-box" style="width:40px;height:40px;font-size:1.05rem;">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="small text-muted-custom">Email</div>
+                                <div class="fw-semibold small">@Model.Profile.Email</div>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Profile.Phone))
+                        {
+                            <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: var(--bg-elevated);">
+                                <div class="service-icon-box" style="width:40px;height:40px;font-size:1.05rem;">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                                <div>
+                                    <div class="small text-muted-custom">Phone</div>
+                                    <div class="fw-semibold small">@Model.Profile.Phone</div>
+                                </div>
+                            </div>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Profile.Location))
+                        {
+                            <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: var(--bg-elevated);">
+                                <div class="service-icon-box" style="width:40px;height:40px;font-size:1.05rem;">
+                                    <i class="bi bi-geo-alt"></i>
+                                </div>
+                                <div>
+                                    <div class="small text-muted-custom">Location</div>
+                                    <div class="fw-semibold small">@Model.Profile.Location</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div id="contactFeedback" class="mb-3">
+                        @if (TempData["ContactSuccess"] != null)
+                        {
+                            <div class="alert alert-success-custom d-flex align-items-center gap-2">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>@TempData["ContactSuccess"]</span>
+                            </div>
+                        }
+                    </div>
+
+                    <form id="contactForm" asp-controller="Home" asp-action="Contact" method="post" class="row g-3">
+                        @Html.AntiForgeryToken()
+                        <div class="col-md-6">
+                            <label asp-for="ContactForm.SenderName" class="form-label small fw-semibold"></label>
+                            <input asp-for="ContactForm.SenderName" name="SenderName" class="form-control form-control-custom" placeholder="Arjun Menon" required />
+                            <span asp-validation-for="ContactForm.SenderName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ContactForm.SenderEmail" class="form-label small fw-semibold"></label>
+                            <input asp-for="ContactForm.SenderEmail" name="SenderEmail" type="email" class="form-control form-control-custom" placeholder="arjun.menon@example.in" required />
+                            <span asp-validation-for="ContactForm.SenderEmail" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="ContactForm.Subject" class="form-label small fw-semibold"></label>
+                            <input asp-for="ContactForm.Subject" name="Subject" class="form-control form-control-custom" placeholder="Regarding ASP.NET Core Web Application" required />
+                            <span asp-validation-for="ContactForm.Subject" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="ContactForm.MessageBody" class="form-label small fw-semibold"></label>
+                            <textarea asp-for="ContactForm.MessageBody" name="MessageBody" rows="4" class="form-control form-control-custom" placeholder="Hi Meghana, I reviewed your portfolio and would like to discuss..." required></textarea>
+                            <span asp-validation-for="ContactForm.MessageBody" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-accent px-4 py-2 d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-send"></i> Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

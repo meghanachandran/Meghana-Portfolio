@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600">
+  <defs>
+    <linearGradient id="heBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#heBg)"/>
+  <rect x="64" y="56" width="832" height="488" rx="20" fill="#ffffff"/>
+  <rect x="64" y="56" width="832" height="68" rx="20" fill="#0f172a"/>
+  <text x="102" y="98" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff">HomeEase</text>
+  <text x="224" y="98" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#94a3b8">Home Appliances E-Commerce</text>
+  <rect x="740" y="74" width="118" height="32" rx="16" fill="#0284c7"/>
+  <text x="799" y="95" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#ffffff">Cart (2 Items)</text>
+  <rect x="102" y="156" width="236" height="340" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="122" y="176" width="196" height="146" rx="10" fill="#e0f2fe"/>
+  <text x="220" y="254" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#0369a1">Smart Inverter AC</text>
+  <text x="122" y="354" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0f172a">Cooling Appliances</text>
+  <text x="122" y="382" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">₹34,990 • In Stock</text>
+  <rect x="122" y="422" width="196" height="42" rx="8" fill="#0f172a"/>
+  <text x="220" y="448" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#ffffff">View Details</text>
+  <rect x="362" y="156" width="236" height="340" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="382" y="176" width="196" height="146" rx="10" fill="#ede9fe"/>
+  <text x="480" y="254" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#5b21b6">Front-Load Washer</text>
+  <text x="382" y="354" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0f172a">Laundry Care</text>
+  <text x="382" y="382" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">₹28,450 • In Stock</text>
+  <rect x="382" y="422" width="196" height="42" rx="8" fill="#0284c7"/>
+  <text x="480" y="448" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#ffffff">Add to Cart</text>
+  <rect x="622" y="156" width="236" height="340" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="642" y="176" width="196" height="146" rx="10" fill="#dcfce7"/>
+  <text x="740" y="254" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#166534">Induction Hob Pro</text>
+  <text x="642" y="354" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0f172a">Kitchen Essentials</text>
+  <text x="642" y="382" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">₹7,990 • In Stock</text>
+  <rect x="642" y="422" width="196" height="42" rx="8" fill="#0f172a"/>
+  <text x="740" y="448" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#ffffff">View Details</text>
+</svg>

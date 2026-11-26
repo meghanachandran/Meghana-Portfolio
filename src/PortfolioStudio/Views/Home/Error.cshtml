@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Error";
+    var code = (int)(ViewBag.StatusCode ?? 500);
+}
+
+<section class="py-5">
+    <div class="container py-5 text-center">
+        <div class="surface-card p-5 mx-auto" style="max-width: 560px;">
+            <span class="font-mono display-4 fw-bold text-accent">@code</span>
+            <h1 class="h3 fw-bold mt-3 mb-2">
+                @(code == 404 ? "Page Not Found" : "Something Went Wrong")
+            </h1>
+            <p class="text-muted-custom mb-4">
+                @(code == 404
+                    ? "The case study or page you requested could not be found or has been unpublished."
+                    : "An unexpected server error occurred. Please try again.")
+            </p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-accent px-4">
+                <i class="bi bi-house me-1"></i> Return Home
+            </a>
+        </div>
+    </div>
+</section>

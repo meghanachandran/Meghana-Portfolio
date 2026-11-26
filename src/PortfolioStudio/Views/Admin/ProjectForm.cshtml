@@ -1,0 +1,168 @@
+@model ProjectFormViewModel
+@{
+    Layout = "_AdminLayout";
+    var isEdit = Model.ProjectId > 0;
+    ViewData["Title"] = isEdit ? $"Edit: {Model.Title}" : "Create New Case Study";
+}
+
+<div class="surface-card p-4 p-lg-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h5 fw-bold mb-1">@(isEdit ? "Update Case Study" : "Publish New Portfolio Project")</h2>
+            <p class="small text-muted-custom mb-0">Upload project imagery, technical details, and case study storytelling.</p>
+        </div>
+        <a asp-action="Projects" class="btn btn-outline-glass btn-sm">&larr; Back to List</a>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger-custom small mb-4"></div>
+
+    <form asp-action="@(isEdit ? "EditProject" : "CreateProject")"
+          asp-route-id="@(isEdit ? Model.ProjectId : null)"
+          method="post"
+          enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="ProjectId" />
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label asp-for="Title" class="form-label small fw-semibold"></label>
+                        <input asp-for="Title" class="form-control form-control-custom" placeholder="e.g. CrewConnect Employee HR Portal" />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="CategoryId" class="form-label small fw-semibold"></label>
+                        <select asp-for="CategoryId" class="form-select form-select-custom">
+                            @foreach (var cat in Model.AvailableCategories)
+                            {
+                                <option value="@cat.CategoryId">@cat.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label asp-for="Slug" class="form-label small fw-semibold"></label>
+                        <input asp-for="Slug" class="form-control form-control-custom font-mono" placeholder="auto-generated-from-title" />
+                        <span asp-validation-for="Slug" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="ProjectDate" class="form-label small fw-semibold"></label>
+                        <input asp-for="ProjectDate" type="date" class="form-control form-control-custom" />
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="ShortDescription" class="form-label small fw-semibold"></label>
+                        <textarea asp-for="ShortDescription" rows="2" class="form-control form-control-custom" placeholder="Concise 1-2 sentence summary displayed on the portfolio grid..."></textarea>
+                        <span asp-validation-for="ShortDescription" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ClientName" class="form-label small fw-semibold"></label>
+                        <input asp-for="ClientName" class="form-control form-control-custom" placeholder="e.g. Triocodes Technologies, Kerala" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="TechStack" class="form-label small fw-semibold"></label>
+                        <input asp-for="TechStack" class="form-control form-control-custom" placeholder="ASP.NET Core MVC, C#, SQL Server, Bootstrap" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="LiveUrl" class="form-label small fw-semibold"></label>
+                        <input asp-for="LiveUrl" class="form-control form-control-custom" placeholder="https://..." />
+                        <span asp-validation-for="LiveUrl" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="RepoUrl" class="form-label small fw-semibold"></label>
+                        <input asp-for="RepoUrl" class="form-control form-control-custom" placeholder="https://github.com/..." />
+                        <span asp-validation-for="RepoUrl" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <h3 class="h6 fw-bold border-bottom border-subtle pb-2">Case Study Narrative</h3>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="CaseStudyChallenge" class="form-label small fw-semibold"></label>
+                        <textarea asp-for="CaseStudyChallenge" rows="3" class="form-control form-control-custom" placeholder="What problem did the client face?"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="CaseStudySolution" class="form-label small fw-semibold"></label>
+                        <textarea asp-for="CaseStudySolution" rows="4" class="form-control form-control-custom" placeholder="How did you design and engineer the solution?"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="CaseStudyOutcome" class="form-label small fw-semibold"></label>
+                        <textarea asp-for="CaseStudyOutcome" rows="3" class="form-control form-control-custom" placeholder="Measurable impact, performance gains, and results..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="p-4 rounded-4 mb-4" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <h3 class="h6 fw-bold mb-3">Cover Image @(isEdit ? "(Optional Replace)" : "(Required)")</h3>
+
+                    <img id="coverPreview"
+                         src="@(Model.CurrentThumbnailUrl ?? "")"
+                         alt="Cover preview"
+                         class="w-100 rounded-3 mb-3 @(string.IsNullOrWhiteSpace(Model.CurrentThumbnailUrl) ? "d-none" : "")"
+                         style="max-height:190px;object-fit:cover;" />
+
+                    <input asp-for="ThumbnailFile"
+                           type="file"
+                           accept=".jpg,.jpeg,.png,.webp,.gif"
+                           data-preview-target="#coverPreview"
+                           class="form-control form-control-custom form-control-sm" />
+                    <span asp-validation-for="ThumbnailFile" class="text-danger small d-block mt-1"></span>
+                    <div class="form-text text-muted-custom small">JPG, PNG, WEBP, GIF (max 5 MB).</div>
+                </div>
+
+                <div class="p-4 rounded-4 mb-4" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <h3 class="h6 fw-bold mb-3">Case Study Gallery</h3>
+                    <input asp-for="GalleryFiles"
+                           type="file"
+                           multiple
+                           accept=".jpg,.jpeg,.png,.webp,.gif"
+                           class="form-control form-control-custom form-control-sm mb-2" />
+                    <span asp-validation-for="GalleryFiles" class="text-danger small d-block"></span>
+
+                    @if (Model.ExistingImages.Any())
+                    {
+                        <div class="small text-muted-custom mt-3 mb-2">Check images to remove:</div>
+                        <div class="row g-2">
+                            @foreach (var img in Model.ExistingImages)
+                            {
+                                <div class="col-6">
+                                    <label class="d-block border border-subtle rounded-3 p-1 text-center cursor-pointer">
+                                        <img src="@img.ImageUrl" class="w-100 rounded-2 mb-1" style="height:72px;object-fit:cover;" />
+                                        <span class="small d-inline-flex align-items-center gap-1 text-danger">
+                                            <input type="checkbox" name="RemoveImageIds" value="@img.ImageId" /> Remove
+                                        </span>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="p-4 rounded-4" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <h3 class="h6 fw-bold mb-3">Visibility &amp; Ordering</h3>
+                    <div class="form-check form-switch mb-2">
+                        <input asp-for="IsPublished" class="form-check-input" />
+                        <label asp-for="IsPublished" class="form-check-label small fw-semibold"></label>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input asp-for="IsFeatured" class="form-check-input" />
+                        <label asp-for="IsFeatured" class="form-check-label small fw-semibold"></label>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="DisplayOrder" class="form-label small fw-semibold"></label>
+                        <input asp-for="DisplayOrder" type="number" class="form-control form-control-custom form-control-sm" />
+                    </div>
+                    <button type="submit" class="btn btn-accent w-100 py-2 fw-semibold">
+                        <i class="bi bi-check2-circle me-1"></i> @(isEdit ? "Save Changes" : "Create Project")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

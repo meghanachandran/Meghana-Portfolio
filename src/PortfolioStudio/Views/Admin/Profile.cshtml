@@ -1,0 +1,90 @@
+@model ProfileFormViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Site Profile & About Section";
+}
+
+<div class="surface-card p-4 p-lg-5">
+    <h2 class="h5 fw-bold mb-1">Public Landing Page Profile</h2>
+    <p class="small text-muted-custom mb-4">Changes here update your Hero, About, and Contact sections automatically.</p>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger-custom small mb-4"></div>
+
+    <form asp-action="Profile" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="ProfileId" />
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="FullName" class="form-label small fw-semibold"></label>
+                        <input asp-for="FullName" class="form-control form-control-custom" />
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Location" class="form-label small fw-semibold"></label>
+                        <input asp-for="Location" class="form-control form-control-custom" />
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Headline" class="form-label small fw-semibold"></label>
+                        <input asp-for="Headline" class="form-control form-control-custom" />
+                        <span asp-validation-for="Headline" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="AboutSummary" class="form-label small fw-semibold"></label>
+                        <textarea asp-for="AboutSummary" rows="2" class="form-control form-control-custom"></textarea>
+                        <span asp-validation-for="AboutSummary" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="AboutBio" class="form-label small fw-semibold"></label>
+                        <textarea asp-for="AboutBio" rows="5" class="form-control form-control-custom"></textarea>
+                        <span asp-validation-for="AboutBio" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label small fw-semibold"></label>
+                        <input asp-for="Email" class="form-control form-control-custom" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Phone" class="form-label small fw-semibold"></label>
+                        <input asp-for="Phone" class="form-control form-control-custom" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="GitHubUrl" class="form-label small fw-semibold"></label>
+                        <input asp-for="GitHubUrl" class="form-control form-control-custom" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="LinkedInUrl" class="form-label small fw-semibold"></label>
+                        <input asp-for="LinkedInUrl" class="form-control form-control-custom" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="ResumeUrl" class="form-label small fw-semibold"></label>
+                        <input asp-for="ResumeUrl" class="form-control form-control-custom" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="p-4 rounded-4" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                    <h3 class="h6 fw-bold mb-3">Profile / Brand Visual</h3>
+                    <img id="profilePreview"
+                         src="@(string.IsNullOrWhiteSpace(Model.CurrentProfileImageUrl) ? "/images/seed/avatar.svg" : Model.CurrentProfileImageUrl)"
+                         alt="Profile Preview"
+                         class="w-100 rounded-4 mb-3"
+                         style="max-height:240px;object-fit:cover;" />
+                    <input asp-for="ProfileImageFile"
+                           type="file"
+                           accept=".jpg,.jpeg,.png,.webp,.gif"
+                           data-preview-target="#profilePreview"
+                           class="form-control form-control-custom form-control-sm mb-3" />
+                    <span asp-validation-for="ProfileImageFile" class="text-danger small d-block mb-3"></span>
+
+                    <button type="submit" class="btn btn-accent w-100 py-2 fw-semibold">
+                        <i class="bi bi-save me-1"></i> Save Profile Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

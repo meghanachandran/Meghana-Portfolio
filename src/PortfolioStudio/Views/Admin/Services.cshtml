@@ -1,0 +1,124 @@
+@model List<ServiceItem>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Services Management";
+}
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="surface-card p-4">
+            <h2 class="h6 fw-bold mb-3">Landing Page Services</h2>
+            <div class="d-flex flex-column gap-3">
+                @foreach (var svc in Model)
+                {
+                    <div class="p-3 rounded-3 d-flex justify-content-between align-items-start gap-3" style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex gap-3">
+                            <div class="service-icon-box flex-shrink-0" style="width:44px;height:44px;font-size:1.15rem;">
+                                <i class="bi @(svc.IconClass ?? "bi-layers")"></i>
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <strong class="small">@svc.Title</strong>
+                                    <span class="badge rounded-pill @(svc.IsActive ? "badge-published" : "badge-draft")" style="font-size:0.65rem;">
+                                        @(svc.IsActive ? "Visible" : "Hidden")
+                                    </span>
+                                </div>
+                                <p class="small text-muted-custom mb-1 mt-1">@svc.Description</p>
+                                <span class="font-mono text-muted-custom" style="font-size:0.7rem;">Order: @svc.DisplayOrder</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-1 flex-shrink-0">
+                            <button type="button"
+                                    class="btn btn-outline-glass btn-sm js-edit-service"
+                                    data-id="@svc.ServiceId"
+                                    data-title="@svc.Title"
+                                    data-desc="@svc.Description"
+                                    data-icon="@(svc.IconClass ?? "bi-layers")"
+                                    data-order="@svc.DisplayOrder"
+                                    data-active="@(svc.IsActive ? "true" : "false")">
+                                Edit
+                            </button>
+                            <form asp-action="DeleteService" asp-route-id="@svc.ServiceId" method="post" class="d-inline" onsubmit="return confirm('Delete this service?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger-soft btn-sm"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="surface-card p-4">
+            <h2 class="h6 fw-bold mb-3" id="serviceFormTitle">Add Service</h2>
+            <form asp-action="SaveService" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="svcId" name="ServiceId" value="0" />
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Service Title</label>
+                    <input type="text" id="svcTitle" name="Title" class="form-control form-control-custom" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Description</label>
+                    <textarea id="svcDesc" name="Description" rows="3" class="form-control form-control-custom" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Bootstrap Icon Class</label>
+                    <input type="text" id="svcIcon" name="IconClass" value="bi-layers" class="form-control form-control-custom font-mono" />
+                    <div class="d-flex flex-wrap gap-1 mt-2">
+                        @foreach (var icon in new[] { "bi-layers", "bi-code-slash", "bi-database-check", "bi-palette2", "bi-cloud-arrow-up", "bi-phone", "bi-shield-check", "bi-lightning-charge" })
+                        {
+                            <button type="button" class="btn btn-outline-glass btn-sm py-0 px-2" onclick="document.getElementById('svcIcon').value='@icon'">
+                                <i class="bi @icon"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="row g-2 mb-4">
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold">Display Order</label>
+                        <input type="number" id="svcOrder" name="DisplayOrder" value="0" class="form-control form-control-custom" />
+                    </div>
+                    <div class="col-6 d-flex align-items-end">
+                        <div class="form-check form-switch mb-2">
+                            <input type="checkbox" id="svcActive" name="IsActive" value="true" checked class="form-check-input" />
+                            <input type="hidden" name="IsActive" value="false" />
+                            <label class="form-check-label small fw-semibold" for="svcActive">Visible</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-accent flex-grow-1">Save Service</button>
+                    <button type="button" class="btn btn-outline-glass" onclick="resetServiceForm()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.js-edit-service').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                document.getElementById('serviceFormTitle').textContent = 'Edit Service';
+                document.getElementById('svcId').value = btn.dataset.id || '0';
+                document.getElementById('svcTitle').value = btn.dataset.title || '';
+                document.getElementById('svcDesc').value = btn.dataset.desc || '';
+                document.getElementById('svcIcon').value = btn.dataset.icon || 'bi-layers';
+                document.getElementById('svcOrder').value = btn.dataset.order || '0';
+                document.getElementById('svcActive').checked = btn.dataset.active === 'true';
+            });
+        });
+        function resetServiceForm() {
+            document.getElementById('serviceFormTitle').textContent = 'Add Service';
+            document.getElementById('svcId').value = 0;
+            document.getElementById('svcTitle').value = '';
+            document.getElementById('svcDesc').value = '';
+            document.getElementById('svcIcon').value = 'bi-layers';
+            document.getElementById('svcOrder').value = 0;
+            document.getElementById('svcActive').checked = true;
+        }
+    </script>
+}

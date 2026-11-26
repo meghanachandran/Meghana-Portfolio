@@ -1,0 +1,48 @@
+@model ChangePasswordViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Account Security";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="surface-card p-4 p-lg-5">
+            <h2 class="h5 fw-bold mb-1">Admin Credentials &amp; Password</h2>
+            <p class="small text-muted-custom mb-4">Update your login email or rotate your administrator password.</p>
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger-custom small mb-3"></div>
+
+            <form asp-action="Security" method="post">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label small fw-semibold"></label>
+                    <input asp-for="FullName" class="form-control form-control-custom" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label small fw-semibold"></label>
+                    <input asp-for="Email" class="form-control form-control-custom" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CurrentPassword" class="form-label small fw-semibold"></label>
+                    <input asp-for="CurrentPassword" class="form-control form-control-custom" />
+                    <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="NewPassword" class="form-label small fw-semibold"></label>
+                    <input asp-for="NewPassword" class="form-control form-control-custom" />
+                    <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="ConfirmPassword" class="form-label small fw-semibold"></label>
+                    <input asp-for="ConfirmPassword" class="form-control form-control-custom" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
+                <button type="submit" class="btn btn-accent w-100 py-2 fw-semibold">
+                    <i class="bi bi-shield-check me-1"></i> Update Security Credentials
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
